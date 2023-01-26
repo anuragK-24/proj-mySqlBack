@@ -6,7 +6,6 @@ router.post("/register",async(req,res)=>{
         const body = req.body
         let sql=  `insert into users values ("${body.username}","43 ","${body.email}", "${body.password}");`
         db.query(sql, (er, result) => {
-
         if(er)
         res.status(400).end('No adaptations found!!')
     })
@@ -28,10 +27,10 @@ router.post("/login", async(req,res) => {
             return res.status(401).json({ error: "invalid login credentials" })
         }
          else {
-                        console.log(resp[0],"username matched")
+                        // console.log(resp[0],"username matched")
                         
             if (resp[0].PASSWORD ===body.password) {
-                console.log("hello");
+                // console.log("hello");
                 console.log("password matched")
                 return res.status(200).json({ message: "add successful" })
             }

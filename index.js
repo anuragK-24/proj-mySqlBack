@@ -9,6 +9,10 @@ const abc = require("./routes/auth");
 app.use("/api/auth", abc);
 
 
+const a = require("./routes/posts");
+app.use("/api/posts", a);
+
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "images")
