@@ -1,19 +1,46 @@
 const router = require("express").Router();
-
+const db=require("./db")
 
 //CREATE POST
-router.post("/",async(req,res)=>{
-    try{
+router.post("/:user",async(req,res)=>{
+    try{  
         const body = req.body
+        const user = req.params.user
         console.log(body)
-        // let sql=  `insert into post values ("${body.username}","43 ","${body.email}", "${body.password}");`
-    //     db.query(sql, (er, result) => {
-    //     if(er)
-    //     res.status(400).end('No adaptations found!!')
-    // })
+        console.log('1',user)
+
+        let sql1 = `select * from user where u_name="${user}";`
+
+        // let sql=  `insert into posts (title,descp,photo,username, categories) values ("${body.title}","${body.desc}","xyz","Anurag","enjoy");`
+        db.query(sql1, (er, result) => {
+        if(er)
+        {
+      console.log("11",result);
+      res.status(400).end('No adaptations found!!')
+    }
+    else{
+          console.log("333",result);
+          const id = result[0].U_ID
+          let sql2=`INSERT INTO POSTS (U_ID, P_TITLE, P_DESCP) VALUES( "${id}" , "${body.title}", "${body.desc}");`
+          db.query(sql2, (er, result) => {
+            if(er)
+            {
+          console.log("11",result);
+          res.status(400).end('No adaptations found!!')
+        }
+        else{
+            
+        }
+        
+      })
+      
+
+      return res.status(200).json(result)
+    }
+    })
     }
     catch(err){
-        res.status(500).json(err);
+        res.status(200).json(err);
     }
 });
 

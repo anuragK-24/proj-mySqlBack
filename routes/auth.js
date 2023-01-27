@@ -4,8 +4,10 @@ const db=require("./db")
 router.post("/register",async(req,res)=>{
     try{
         const body = req.body
-        let sql=  `insert into users values ("${body.username}","43 ","${body.email}", "${body.password}");`
+        console.log(body)
+        let sql=  `insert into user (U_NAME,A_ID, U_EMAIL, U_PASSWORD ) values ("${body.username}","","${body.email}", "${body.password}");`
         db.query(sql, (er, result) => {
+            console.log(er)
         if(er)
         res.status(400).end('No adaptations found!!')
     })
@@ -20,17 +22,18 @@ router.post("/register",async(req,res)=>{
 router.post("/login", async(req,res) => {
     try {
         const body = req.body
-    let sql = `select * from users where username="${body.username}";`
-
+        console.log(body)
+    let sql = `select * from user where u_name="${body.username}";`
+        console.log(body)
     db.query(sql, (err, resp) => {
         if (err) {
+            console.log(err)
             return res.status(401).json({ error: "invalid login credentials" })
         }
          else {
                         // console.log(resp[0],"username matched")
                         
-            if (resp[0].PASSWORD ===body.password) {
-                // console.log("hello");
+            if (resp[0].U_PASSWORD === body.password) {
                 console.log("password matched")
                 return res.status(200).json({ message: "add successful" })
             }
