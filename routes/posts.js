@@ -19,23 +19,42 @@ router.post("/:user",async(req,res)=>{
       res.status(400).end('No adaptations found!!')
     }
     else{
-          console.log("333",result);
+          // console.log("333",result);
           const id = result[0].U_ID
           let sql2=`INSERT INTO POSTS (U_ID, P_TITLE, P_DESCP) VALUES( "${id}" , "${body.title}", "${body.desc}");`
-          db.query(sql2, (er, result) => {
+          db.query(sql2, (er, result1) => {
             if(er)
             {
-          console.log("11",result);
+          console.log("11",result1);
           res.status(400).end('No adaptations found!!')
         }
         else{
-            
-        }
+            // console.log(result1,"dfsd")
+            let sql3 = `select * from posts where p_id="${result1.insertId}";`
+      
+            db.query(sql3, (er, result) => {
+            if(er){
+              console.log("11",result);
+              res.status(400).end('No adaptations found!!')
+            }
+            else{
+             res.send(result[0])
+              // console.log(result)
+             }
+             
+            })
+      }
         
       })
       
 
-      return res.status(200).json(result)
+
+
+    
+
+
+
+      // return res.status(200).json(result[0])
     }
     })
     }
@@ -45,12 +64,24 @@ router.post("/:user",async(req,res)=>{
 });
 
 
+
+
+
+
+
+
 //UPDATE POST
 router.put("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const data = req.params.id;
+    console.log(data)
     if (post.username === req.body.username) {
       try {
+        
+        let sql5 = `UPDATE POSTS SET P_TITLE= 'Alfred Schmidt', P_DESCP= 'Frankfurt' WHERE P_ID = 68;`
+        
+        
+        
         const updatedPost = await Post.findByIdAndUpdate(
           req.params.id,
           {
@@ -92,31 +123,49 @@ router.delete("/:id", async (req, res) => {
 //GET POST
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    res.status(200).json(post);
+        console.log(req.params.id)
+
+          let sql4=`SELECT * FROM POSTS WHERE P_ID=${req.params.id};`
+          db.query(sql4, (er, result1) => {
+            if(er)
+            {
+          console.log("11",result1);
+          res.status(400).end('No adaptations found!!')
+        }
+        else{
+            console.log(result1)
+            console.log(result1[0])
+            res.send(result1[0]);
+        }
+      })
+    // res.status(200).json();
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+
+
+
+
+
+
 //GET ALL POSTS
 router.get("/", async (req, res) => {
-  const username = req.query.user;
-  const catName = req.query.cat;
   try {
-    let posts;
-    if (username) {
-      posts = await Post.find({ username });
-    } else if (catName) {
-      posts = await Post.find({
-        categories: {
-          $in: [catName],
-        },
-      });
-    } else {
-      posts = await Post.find();
-    }
-    res.status(200).json(posts);
+          let sql4=`SELECT * FROM POSTS ;`
+          db.query(sql4, (er, result1) => {
+            if(er)
+            {
+          console.log("11",result1);
+          res.status(400).end('No adaptations found!!')
+        }
+        else{
+            console.log(result1)
+            res.send(result1);
+        }
+      })
+    // res.status(200).json();
   } catch (err) {
     res.status(500).json(err);
   }

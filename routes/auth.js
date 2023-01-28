@@ -35,7 +35,7 @@ router.post("/login", async(req,res) => {
                         
             if (resp[0].U_PASSWORD === body.password) {
                 console.log("password matched")
-                return res.status(200).json({ message: "add successful" })
+                return res.status(200).json(body.username)
             }
         }
     })
